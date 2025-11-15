@@ -100,4 +100,22 @@ const sampleTracks = [
   }
 ];
 
-// Seed database with sample data
+const { db, Track } = require('./setup');
+
+async function seedDatabase() {
+  try {
+    await db.authenticate();
+    console.log('Connected to database for seeding.');
+
+    await Track.bulkCreate(sampleTracks);
+    console.log('Sample tracks inserted successfully.');
+
+    const allTracks = await Track.findAll();
+    console.log(`Tracks in database: ${allTracks.length}`);
+
+    await db.close();
+  } catch (error) {
+    console.error(`Error seeding database: ${error}`);
+    }
+}
+seedDatabase();
